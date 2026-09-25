@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>SaaS Homepage Grader</title>
+<style>
+html, body { margin: 0; padding: 0; background: transparent; }
+body { padding: 8px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+.sg-app h3, .sg-app h4 { font-family: inherit; font-weight: 700; }
+.sg-app {
+	--sg-accent: #54ac94;
+	--sg-ink: #1f3558;
+	--sg-text: #111827;
+	--sg-muted: #6b7280;
+	--sg-line: #e5e7eb;
+	--sg-bg: #ffffff;
+	--sg-soft: #f9fafb;
+	--sg-good: #16a34a;
+	--sg-ok: #d97706;
+	--sg-bad: #dc2626;
+	box-sizing: border-box;
+	max-width: 760px;
+	margin: 0 auto;
+	padding: 28px;
+	background: var(--sg-bg);
+	color: var(--sg-text);
+	border: 1px solid var(--sg-line);
+	border-radius: 16px;
+	box-shadow: 0 10px 30px rgba(17, 24, 39, .06);
+	font-family: inherit;
+	font-size: 16px;
+	line-height: 1.55;
+}
+.sg-app *, .sg-app *::before, .sg-app *::after { box-sizing: border-box; }
+.sg-app [hidden] { display: none !important; }
+
+.sg-label { display: block; font-weight: 600; margin-bottom: 8px; }
+.sg-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.sg-input {
+	flex: 1 1 260px;
+	min-width: 0;
+	padding: 13px 14px;
+	font: inherit;
+	color: var(--sg-text);
+	background: #fff;
+	border: 1px solid #d1d5db;
+	border-radius: 10px;
+	margin: 0;
+}
+.sg-input:focus { outline: 2px solid var(--sg-accent); outline-offset: 1px; border-color: transparent; }
+.sg-btn {
+	display: inline-block;
+	padding: 13px 20px;
+	font: inherit;
+	font-weight: 600;
+	color: #fff !important;
+	background: var(--sg-accent);
+	border: 0;
+	border-radius: 10px;
+	cursor: pointer;
+	text-decoration: none !important;
+	white-space: nowrap;
+	transition: filter .15s, transform .15s;
+}
+.sg-btn:hover { filter: brightness(1.06); box-shadow: 0 4px 14px rgba(84, 172, 148, .35); }
+.sg-btn:active { transform: translateY(1px); }
+.sg-btn:disabled { opacity: .7; cursor: wait; }
+.sg-btn-lg { padding: 15px 24px; font-size: 17px; }
+.sg-hint, .sg-muted { color: var(--sg-muted); font-size: 14px; margin: 8px 0 0; }
+.sg-error { color: var(--sg-bad); font-size: 14px; margin: 10px 0 0; }
+.sg-hp { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; opacity: 0; }
+
+/* loading */
+.sg-loading { text-align: center; padding: 36px 0; }
+.sg-spinner {
+	width: 42px; height: 42px; margin: 0 auto 14px;
+	border: 4px solid var(--sg-line); border-top-color: var(--sg-accent);
+	border-radius: 50%; animation: sg-spin .9s linear infinite;
+}
+.sg-loading-text { color: var(--sg-muted); margin: 0; }
+@keyframes sg-spin { to { transform: rotate(360deg); } }
+
+/* head */
+.sg-head { display: flex; gap: 24px; align-items: center; margin-bottom: 8px; }
+.sg-ring { width: 132px; height: 132px; flex: 0 0 132px; }
+.sg-ring-bg { fill: none; stroke: var(--sg-line); stroke-width: 10; }
+.sg-ring-fg { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1.2s ease; }
+.sg-ring.sg-good .sg-ring-fg { stroke: var(--sg-good); }
+.sg-ring.sg-ok .sg-ring-fg { stroke: var(--sg-ok); }
+.sg-ring.sg-bad .sg-ring-fg { stroke: var(--sg-bad); }
+.sg-ring-num { font-size: 34px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; fill: var(--sg-text); }
+.sg-ring-of { font-size: 12px; text-anchor: middle; fill: var(--sg-muted); }
+.sg-eyebrow { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--sg-ink); }
+.sg-grade-title { color: var(--sg-ink); margin: 2px 0 6px; font-size: 22px; line-height: 1.25; }
+.sg-summary { margin: 0; font-style: italic; }
+
+.sg-section { margin: 28px 0 12px; font-size: 18px; color: var(--sg-ink); }
+
+/* categories */
+.sg-cats { display: grid; gap: 12px; }
+.sg-cat { padding: 14px 16px; border: 1px solid var(--sg-line); border-radius: 12px; background: var(--sg-soft); }
+.sg-cat-top { display: flex; justify-content: space-between; gap: 12px; font-weight: 600; }
+.sg-cat-score { font-variant-numeric: tabular-nums; }
+.sg-good .sg-cat-score { color: var(--sg-good); }
+.sg-ok .sg-cat-score { color: var(--sg-ok); }
+.sg-bad .sg-cat-score { color: var(--sg-bad); }
+.sg-bar { height: 6px; margin: 8px 0; background: var(--sg-line); border-radius: 99px; overflow: hidden; }
+.sg-bar-fill { height: 100%; border-radius: 99px; transition: width 1s ease; }
+.sg-good .sg-bar-fill { background: var(--sg-good); }
+.sg-ok .sg-bar-fill { background: var(--sg-ok); }
+.sg-bad .sg-bar-fill { background: var(--sg-bad); }
+.sg-cat-verdict { margin: 0; font-size: 15px; color: #374151; }
+.sg-det { margin-top: 10px; font-size: 15px; }
+.sg-det summary { cursor: pointer; color: var(--sg-ink); font-weight: 600; }
+.sg-det-h { margin: 10px 0 4px; font-weight: 600; }
+.sg-det ul { margin: 0; padding-left: 20px; }
+
+/* locked */
+.sg-locked { position: relative; margin-top: 28px; border-radius: 14px; overflow: hidden; border: 1px solid var(--sg-line); }
+.sg-fake { position: absolute; inset: 0; padding: 22px; filter: blur(3px); opacity: .5; }
+.sg-fake-line { height: 12px; margin: 12px 0; border-radius: 6px; background: #d1d5db; }
+.sg-fake-line:nth-child(2n) { width: 80%; }
+.sg-fake-line:nth-child(3n) { width: 60%; }
+.sg-unlock {
+	position: relative;
+	padding: 26px 22px;
+	background: linear-gradient(to bottom, rgba(255,255,255,.75), rgba(255,255,255,.97) 35%);
+}
+.sg-unlock-title { margin: 0 0 4px; font-size: 19px; color: var(--sg-ink); }
+.sg-unlock-form { margin-top: 12px; display: grid; gap: 10px; }
+
+/* full report */
+.sg-full { margin-top: 28px; }
+.sg-verdict { padding: 14px 16px; border-left: 4px solid var(--sg-accent); background: var(--sg-soft); border-radius: 0 10px 10px 0; margin: 0; }
+.sg-top { margin: 0; padding-left: 22px; }
+.sg-top-item { margin-bottom: 14px; }
+.sg-top-item p { margin: 4px 0 0; }
+.sg-how { color: #374151; }
+.sg-headlines { margin: 0; padding-left: 20px; }
+.sg-headlines li { margin-bottom: 8px; }
+.sg-cta { margin-top: 28px; padding: 22px; text-align: center; border-radius: 14px; background: #eef7f4; border: 1px solid var(--sg-accent); }
+.sg-cta p { margin: 0 0 14px; }
+
+.sg-link { display: block; margin: 24px auto 0; background: none; border: 0; color: var(--sg-muted); text-decoration: underline; cursor: pointer; font: inherit; font-size: 14px; }
+
+@media (max-width: 600px) {
+	.sg-app { padding: 18px; border-radius: 12px; }
+	.sg-head { flex-direction: column; text-align: center; }
+	.sg-btn { width: 100%; text-align: center; }
+}
+</style>
+</head>
+<body>
+<div class="sg-app" id="sg-app">
+	<form class="sg-form" id="sg-form" novalidate>
+		<label for="sg-url" class="sg-label">Your SaaS homepage URL</label>
+		<div class="sg-row">
+			<input type="text" id="sg-url" name="url" class="sg-input" placeholder="yourproduct.com" autocomplete="url" inputmode="url" required>
+			<button type="submit" class="sg-btn">Grade my homepage</button>
+		</div>
+		<input type="text" name="website" class="sg-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+		<p class="sg-hint">Free. Takes about 30 seconds. We score 8 conversion factors founders miss.</p>
+		<p class="sg-error" id="sg-error" role="alert" hidden></p>
+	</form>
+	<div class="sg-loading" id="sg-loading" hidden>
+		<div class="sg-spinner" aria-hidden="true"></div>
+		<p class="sg-loading-text" id="sg-loading-text">Fetching your homepage…</p>
+	</div>
+	<div class="sg-result" id="sg-result" hidden></div>
+</div>
+
+<script>
+/* ===== EDIT THESE SETTINGS ===== */
+window.SG_CONFIG = /*SG_CONFIG_START*/{
+	"endpoint": "https://roadtotop5.com/wp-json/saas-grader/v1/",
+	"bookingUrl": "https://roadtotop5.com/contact/",
+	"ctaText": "Book a free 15-min homepage teardown",
+	"brand": "Road to Top 5",
+	"accent": "#54ac94",
+	"ink": "#1f3558"
+}/*SG_CONFIG_END*/;
+/* =============================== */
+(function (a) { a.style.setProperty('--sg-accent', window.SG_CONFIG.accent || '#54ac94'); a.style.setProperty('--sg-ink', window.SG_CONFIG.ink || '#1f3558'); })(document.getElementById('sg-app'));
+
+/* Tell the parent page how tall we are, so the iframe never shows a scrollbar. */
+(function () {
+	var last = 0;
+	function send() {
+		var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+		if (h !== last) { last = h; try { window.parent.postMessage({ type: 'sg-height', height: h }, '*'); } catch (e) {} }
+	}
+	if ('ResizeObserver' in window) new ResizeObserver(send).observe(document.body);
+	window.addEventListener('load', send);
+	setInterval(send, 1000);
+})();
+</script>
+<script>
+(function () {
+	'use strict';
+
+	var cfg = window.SG_CONFIG || {};
+	var app = document.getElementById('sg-app');
+	if (!app) return;
+
+	var form = document.getElementById('sg-form');
+	var errEl = document.getElementById('sg-error');
+	var loading = document.getElementById('sg-loading');
+	var loadingText = document.getElementById('sg-loading-text');
+	var resultEl = document.getElementById('sg-result');
+	var steps = [
+		'Fetching your homepage…',
+		'Reading your headline and value prop…',
+		'Checking CTAs and social proof…',
+		'Looking for objections you haven’t answered…',
+		'Scoring 8 conversion factors…',
+		'Writing your fixes…'
+	];
+	var stepTimer = null;
+
+	/* ---------- helpers ---------- */
+	function el(tag, cls, text) {
+		var n = document.createElement(tag);
+		if (cls) n.className = cls;
+		if (text != null) n.textContent = text;
+		return n;
+	}
+	function append(parent) {
+		for (var i = 1; i < arguments.length; i++) if (arguments[i]) parent.appendChild(arguments[i]);
+		return parent;
+	}
+	function tone(score10) {
+		return score10 >= 8 ? 'good' : score10 >= 5 ? 'ok' : 'bad';
+	}
+	function host(url) {
+		try { return new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return url; }
+	}
+	function post(path, body) {
+		return fetch(cfg.endpoint + path, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(body)
+		}).then(function (r) {
+			return r.json().catch(function () { return {}; }).then(function (data) {
+				if (!r.ok) throw new Error((data && data.message) || 'Something went wrong. Please try again.');
+				return data;
+			});
+		});
+	}
+	function showError(msg) {
+		errEl.textContent = msg;
+		errEl.hidden = !msg;
+	}
+	function startLoading() {
+		var i = 0;
+		loadingText.textContent = steps[0];
+		loading.hidden = false;
+		stepTimer = setInterval(function () {
+			i = Math.min(i + 1, steps.length - 1);
+			loadingText.textContent = steps[i];
+		}, 5000);
+	}
+	function stopLoading() {
+		clearInterval(stepTimer);
+		loading.hidden = true;
+	}
+
+	/* ---------- grade ---------- */
+	form.addEventListener('submit', function (e) {
+		e.preventDefault();
+		var url = form.url.value.trim();
+		if (!url) { showError('Please enter your homepage URL.'); return; }
+		showError('');
+		form.hidden = true;
+		resultEl.hidden = true;
+		resultEl.innerHTML = '';
+		startLoading();
+
+		post('grade', { url: url, website: form.website.value })
+			.then(function (data) {
+				stopLoading();
+				renderResult(data);
+			})
+			.catch(function (err) {
+				stopLoading();
+				form.hidden = false;
+				showError(err.message);
+			});
+	});
+
+	/* ---------- result ---------- */
+	function scoreRing(score) {
+		var r = 52, c = 2 * Math.PI * r;
+		var ns = 'http://www.w3.org/2000/svg';
+		var svg = document.createElementNS(ns, 'svg');
+		svg.setAttribute('viewBox', '0 0 120 120');
+		svg.setAttribute('class', 'sg-ring sg-' + tone(score / 10));
+		svg.setAttribute('role', 'img');
+		svg.setAttribute('aria-label', 'Score ' + score + ' out of 100');
+		var bg = document.createElementNS(ns, 'circle');
+		bg.setAttribute('cx', 60); bg.setAttribute('cy', 60); bg.setAttribute('r', r);
+		bg.setAttribute('class', 'sg-ring-bg');
+		var fg = document.createElementNS(ns, 'circle');
+		fg.setAttribute('cx', 60); fg.setAttribute('cy', 60); fg.setAttribute('r', r);
+		fg.setAttribute('class', 'sg-ring-fg');
+		fg.setAttribute('stroke-dasharray', c);
+		fg.setAttribute('stroke-dashoffset', c);
+		fg.setAttribute('transform', 'rotate(-90 60 60)');
+		var t = document.createElementNS(ns, 'text');
+		t.setAttribute('x', 60); t.setAttribute('y', 60);
+		t.setAttribute('class', 'sg-ring-num');
+		t.textContent = score;
+		var t2 = document.createElementNS(ns, 'text');
+		t2.setAttribute('x', 60); t2.setAttribute('y', 82);
+		t2.setAttribute('class', 'sg-ring-of');
+		t2.textContent = '/ 100';
+		svg.appendChild(bg); svg.appendChild(fg); svg.appendChild(t); svg.appendChild(t2);
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () { fg.setAttribute('stroke-dashoffset', c * (1 - score / 100)); });
+		});
+		return svg;
+	}
+
+	function renderResult(d) {
+		resultEl.innerHTML = '';
+
+		var head = el('div', 'sg-head');
+		var info = el('div', 'sg-head-info');
+		append(info,
+			el('p', 'sg-eyebrow', host(d.url)),
+			el('h3', 'sg-grade-title', 'Grade ' + d.grade + ' · ' + d.label),
+			d.product_summary ? el('p', 'sg-summary', '“' + d.product_summary + '”') : null,
+			el('p', 'sg-muted', 'That’s how a first-time visitor reads your homepage.')
+		);
+		append(head, scoreRing(d.overall), info);
+
+		var list = el('div', 'sg-cats');
+		d.categories.forEach(function (c) {
+			var row = el('div', 'sg-cat sg-' + tone(c.score));
+			var top = el('div', 'sg-cat-top');
+			append(top, el('span', 'sg-cat-label', c.label), el('span', 'sg-cat-score', c.score + '/10'));
+			var bar = el('div', 'sg-bar');
+			var fill = el('div', 'sg-bar-fill');
+			fill.style.width = '0%';
+			bar.appendChild(fill);
+			requestAnimationFrame(function () {
+				requestAnimationFrame(function () { fill.style.width = (c.score * 10) + '%'; });
+			});
+			append(row, top, bar, el('p', 'sg-cat-verdict', c.verdict));
+			row.setAttribute('data-key', c.key);
+			list.appendChild(row);
+		});
+
+		append(resultEl, head, el('h4', 'sg-section', 'Your 8 conversion factors'), list, lockedPanel(d), againLink());
+		resultEl.hidden = false;
+		try { window.parent.postMessage({ type: 'sg-scroll' }, '*'); } catch (e) {}
+	}
+
+	function lockedPanel(d) {
+		var wrap = el('div', 'sg-locked');
+		var fake = el('div', 'sg-fake', null);
+		fake.setAttribute('aria-hidden', 'true');
+		for (var i = 0; i < 5; i++) fake.appendChild(el('div', 'sg-fake-line'));
+
+		var box = el('div', 'sg-unlock');
+		append(box,
+			el('h4', 'sg-unlock-title', 'We found ' + d.locked.issues + ' issues and wrote ' + d.locked.fixes + ' fixes'),
+			el('p', 'sg-muted', 'Get your top 3 priority fixes, ' + d.locked.headlines + ' rewritten headlines, and a line-by-line breakdown. We’ll also email you a copy.')
+		);
+
+		var f = el('form', 'sg-unlock-form');
+		f.noValidate = true;
+		var name = el('input', 'sg-input');
+		name.type = 'text'; name.name = 'name'; name.placeholder = 'First name (optional)'; name.autocomplete = 'given-name';
+		var email = el('input', 'sg-input');
+		email.type = 'email'; email.name = 'email'; email.placeholder = 'you@company.com'; email.required = true; email.autocomplete = 'email';
+		var hp = el('input', 'sg-hp');
+		hp.type = 'text'; hp.name = 'website'; hp.tabIndex = -1; hp.autocomplete = 'off';
+		hp.setAttribute('aria-hidden', 'true');
+		var btn = el('button', 'sg-btn', 'Unlock my full report');
+		btn.type = 'submit';
+		var err = el('p', 'sg-error');
+		err.hidden = true;
+		err.setAttribute('role', 'alert');
+		var row = el('div', 'sg-row');
+		append(row, email, btn);
+		append(f, name, row, hp, err, el('p', 'sg-hint', 'No spam. One report, plus the occasional SEO/CRO tip you can unsubscribe from.'));
+
+		f.addEventListener('submit', function (e) {
+			e.preventDefault();
+			var v = email.value.trim();
+			if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+				err.textContent = 'Please enter a valid email address.'; err.hidden = false; return;
+			}
+			err.hidden = true;
+			btn.disabled = true;
+			btn.textContent = 'Unlocking…';
+			post('unlock', { id: d.id, email: v, name: name.value.trim(), website: hp.value })
+				.then(function (full) { wrap.replaceWith(fullReport(full)); fillCategoryDetails(full); })
+				.catch(function (e2) {
+					err.textContent = e2.message; err.hidden = false;
+					btn.disabled = false; btn.textContent = 'Unlock my full report';
+				});
+		});
+
+		box.appendChild(f);
+		append(wrap, fake, box);
+		return wrap;
+	}
+
+	function fullReport(r) {
+		var wrap = el('div', 'sg-full');
+
+		if (r.overall_verdict) wrap.appendChild(el('p', 'sg-verdict', r.overall_verdict));
+
+		if (r.top_fixes && r.top_fixes.length) {
+			wrap.appendChild(el('h4', 'sg-section', 'Your top 3 fixes'));
+			var ol = el('ol', 'sg-top');
+			r.top_fixes.forEach(function (f) {
+				var li = el('li', 'sg-top-item');
+				append(li, el('strong', null, f.title), el('p', null, f.why), el('p', 'sg-how', 'How: ' + f.how));
+				ol.appendChild(li);
+			});
+			wrap.appendChild(ol);
+		}
+
+		if (r.headline_rewrites && r.headline_rewrites.length) {
+			wrap.appendChild(el('h4', 'sg-section', 'Headline rewrites to test'));
+			var ul = el('ul', 'sg-headlines');
+			r.headline_rewrites.forEach(function (h) { ul.appendChild(el('li', null, h)); });
+			wrap.appendChild(ul);
+		}
+
+		if (cfg.bookingUrl) {
+			var cta = el('div', 'sg-cta');
+			var a = el('a', 'sg-btn sg-btn-lg', cfg.ctaText || 'Book a call');
+			a.href = cfg.bookingUrl; a.target = '_blank'; a.rel = 'noopener';
+			append(cta,
+				el('p', null, 'Want these fixed without the guesswork? ' + (cfg.brand ? cfg.brand + ' will' : 'We’ll') + ' walk through your homepage live and prioritise the changes.'),
+				a
+			);
+			wrap.appendChild(cta);
+		}
+		wrap.appendChild(el('p', 'sg-muted', 'A copy is on its way to your inbox. Details for each factor are now open above.'));
+		return wrap;
+	}
+
+	function fillCategoryDetails(r) {
+		r.categories.forEach(function (c) {
+			var row = resultEl.querySelector('.sg-cat[data-key="' + c.key + '"]');
+			if (!row || (!c.issues.length && !c.fixes.length)) return;
+			var det = el('details', 'sg-det');
+			det.appendChild(el('summary', null, 'Issues & fixes'));
+			if (c.issues.length) {
+				det.appendChild(el('p', 'sg-det-h', 'What’s wrong'));
+				var ui = el('ul');
+				c.issues.forEach(function (x) { ui.appendChild(el('li', null, x)); });
+				det.appendChild(ui);
+			}
+			if (c.fixes.length) {
+				det.appendChild(el('p', 'sg-det-h', 'Fix it'));
+				var uf = el('ul');
+				c.fixes.forEach(function (x) { uf.appendChild(el('li', null, x)); });
+				det.appendChild(uf);
+			}
+			row.appendChild(det);
+		});
+	}
+
+	function againLink() {
+		var b = el('button', 'sg-link', 'Grade another homepage');
+		b.type = 'button';
+		b.addEventListener('click', function () {
+			resultEl.hidden = true;
+			resultEl.innerHTML = '';
+			form.hidden = false;
+			form.url.value = '';
+			form.url.focus();
+		});
+		return b;
+	}
+})();
+
+</script>
+</body>
+</html>

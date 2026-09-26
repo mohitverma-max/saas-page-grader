@@ -13,33 +13,39 @@ body { padding: 8px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
 	--sg-accent: #54ac94;
 	--sg-ink: #1f3558;
 	--sg-text: #111827;
+	--sg-text-2: #374151;
 	--sg-muted: #6b7280;
 	--sg-line: #e5e7eb;
 	--sg-bg: #ffffff;
-	--sg-soft: #f9fafb;
-	--sg-good: #16a34a;
-	--sg-ok: #d97706;
-	--sg-bad: #dc2626;
+	--sg-soft: #f7f9fb;
+	--sg-mint-soft: #eaf6f2;
+	--sg-good: #0ca30c;
+	--sg-ok: #fab219;
+	--sg-bad: #d03b3b;
+	position: relative;
 	box-sizing: border-box;
-	max-width: 760px;
+	max-width: 980px;
 	margin: 0 auto;
 	padding: 28px;
 	background: var(--sg-bg);
 	color: var(--sg-text);
 	border: 1px solid var(--sg-line);
-	border-radius: 16px;
-	box-shadow: 0 10px 30px rgba(17, 24, 39, .06);
+	border-radius: 18px;
+	box-shadow: 0 12px 36px rgba(31, 53, 88, .08);
 	font-family: inherit;
 	font-size: 16px;
 	line-height: 1.55;
 }
 .sg-app *, .sg-app *::before, .sg-app *::after { box-sizing: border-box; }
 .sg-app [hidden] { display: none !important; }
+.sg-app h3, .sg-app h4, .sg-app h5 { font-family: inherit; color: var(--sg-ink); line-height: 1.25; }
 
-.sg-label { display: block; font-weight: 600; margin-bottom: 8px; }
+/* ---------- form ---------- */
+.sg-label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--sg-ink); }
 .sg-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .sg-input {
 	flex: 1 1 260px;
+	width: 100%;
 	min-width: 0;
 	padding: 13px 14px;
 	font: inherit;
@@ -52,9 +58,9 @@ body { padding: 8px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
 .sg-input:focus { outline: 2px solid var(--sg-accent); outline-offset: 1px; border-color: transparent; }
 .sg-btn {
 	display: inline-block;
-	padding: 13px 20px;
+	padding: 13px 22px;
 	font: inherit;
-	font-weight: 600;
+	font-weight: 700;
 	color: #fff !important;
 	background: var(--sg-accent);
 	border: 0;
@@ -62,17 +68,18 @@ body { padding: 8px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
 	cursor: pointer;
 	text-decoration: none !important;
 	white-space: nowrap;
-	transition: filter .15s, transform .15s;
+	text-align: center;
+	transition: filter .15s, transform .15s, box-shadow .15s;
 }
-.sg-btn:hover { filter: brightness(1.06); box-shadow: 0 4px 14px rgba(84, 172, 148, .35); }
+.sg-btn:hover { filter: brightness(1.06); box-shadow: 0 6px 16px rgba(84, 172, 148, .35); }
 .sg-btn:active { transform: translateY(1px); }
 .sg-btn:disabled { opacity: .7; cursor: wait; }
-.sg-btn-lg { padding: 15px 24px; font-size: 17px; }
-.sg-hint, .sg-muted { color: var(--sg-muted); font-size: 14px; margin: 8px 0 0; }
+.sg-btn-lg { padding: 15px 26px; font-size: 17px; }
+.sg-hint { color: var(--sg-muted); font-size: 14px; margin: 8px 0 0; }
 .sg-error { color: var(--sg-bad); font-size: 14px; margin: 10px 0 0; }
-.sg-hp { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; opacity: 0; }
+.sg-hp { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
-/* loading */
+/* ---------- loading ---------- */
 .sg-loading { text-align: center; padding: 36px 0; }
 .sg-spinner {
 	width: 42px; height: 42px; margin: 0 auto 14px;
@@ -82,81 +89,158 @@ body { padding: 8px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
 .sg-loading-text { color: var(--sg-muted); margin: 0; }
 @keyframes sg-spin { to { transform: rotate(360deg); } }
 
-/* head */
-.sg-head { display: flex; gap: 24px; align-items: center; margin-bottom: 8px; }
-.sg-ring { width: 132px; height: 132px; flex: 0 0 132px; }
-.sg-ring-bg { fill: none; stroke: var(--sg-line); stroke-width: 10; }
-.sg-ring-fg { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1.2s ease; }
-.sg-ring.sg-good .sg-ring-fg { stroke: var(--sg-good); }
-.sg-ring.sg-ok .sg-ring-fg { stroke: var(--sg-ok); }
-.sg-ring.sg-bad .sg-ring-fg { stroke: var(--sg-bad); }
-.sg-ring-num { font-size: 34px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; fill: var(--sg-text); }
-.sg-ring-of { font-size: 12px; text-anchor: middle; fill: var(--sg-muted); }
-.sg-eyebrow { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--sg-ink); }
-.sg-grade-title { color: var(--sg-ink); margin: 2px 0 6px; font-size: 22px; line-height: 1.25; }
-.sg-summary { margin: 0; font-style: italic; }
-
-.sg-section { margin: 28px 0 12px; font-size: 18px; color: var(--sg-ink); }
-
-/* categories */
-.sg-cats { display: grid; gap: 12px; }
-.sg-cat { padding: 14px 16px; border: 1px solid var(--sg-line); border-radius: 12px; background: var(--sg-soft); }
-.sg-cat-top { display: flex; justify-content: space-between; gap: 12px; font-weight: 600; }
-.sg-cat-score { font-variant-numeric: tabular-nums; }
-.sg-good .sg-cat-score { color: var(--sg-good); }
-.sg-ok .sg-cat-score { color: var(--sg-ok); }
-.sg-bad .sg-cat-score { color: var(--sg-bad); }
-.sg-bar { height: 6px; margin: 8px 0; background: var(--sg-line); border-radius: 99px; overflow: hidden; }
-.sg-bar-fill { height: 100%; border-radius: 99px; transition: width 1s ease; }
-.sg-good .sg-bar-fill { background: var(--sg-good); }
-.sg-ok .sg-bar-fill { background: var(--sg-ok); }
-.sg-bad .sg-bar-fill { background: var(--sg-bad); }
-.sg-cat-verdict { margin: 0; font-size: 15px; color: #374151; }
-.sg-quick { margin-top: 10px; padding: 10px 12px; background: #eef7f4; border-left: 3px solid var(--sg-accent); border-radius: 0 8px 8px 0; }
-.sg-quick-label { display: block; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--sg-ink); }
-.sg-quick-text { margin: 2px 0 0; font-size: 15px; color: var(--sg-text); }
-.sg-det { margin-top: 10px; font-size: 15px; }
-.sg-det summary { cursor: pointer; color: var(--sg-ink); font-weight: 600; }
-.sg-det-h { margin: 10px 0 4px; font-weight: 600; }
-.sg-det ul { margin: 0; padding-left: 20px; }
-
-/* locked */
-.sg-locked { position: relative; margin-top: 28px; border-radius: 14px; overflow: hidden; border: 1px solid var(--sg-line); }
-.sg-fake { position: absolute; inset: 0; padding: 22px; filter: blur(3px); opacity: .5; }
-.sg-fake-line { height: 12px; margin: 12px 0; border-radius: 6px; background: #d1d5db; }
-.sg-fake-line:nth-child(2n) { width: 80%; }
-.sg-fake-line:nth-child(3n) { width: 60%; }
-.sg-unlock {
-	position: relative;
-	padding: 26px 22px;
-	background: linear-gradient(to bottom, rgba(255,255,255,.75), rgba(255,255,255,.97) 35%);
+/* ---------- hero ---------- */
+.sg-hero {
+	display: flex; gap: 24px; align-items: center;
+	padding: 22px; margin: -4px 0 18px;
+	border-radius: 16px;
+	background: linear-gradient(135deg, var(--sg-mint-soft), #eef3fb);
 }
-.sg-unlock-title { margin: 0 0 4px; font-size: 19px; color: var(--sg-ink); }
-.sg-unlock-form { margin-top: 12px; display: grid; gap: 10px; }
+.sg-ring { width: 136px; height: 136px; flex: 0 0 136px; }
+.sg-ring-bg { fill: #fff; stroke: #dfe7ee; stroke-width: 10; }
+.sg-ring-fg { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1.2s ease; }
+.sg-ring-num { font-size: 34px; font-weight: 800; text-anchor: middle; dominant-baseline: middle; fill: var(--sg-ink); }
+.sg-ring-of { font-size: 12px; text-anchor: middle; fill: var(--sg-muted); }
+.sg-eyebrow { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--sg-ink); opacity: .75; }
+.sg-grade-title { margin: 2px 0 6px; font-size: 24px; }
+.sg-summary { margin: 0 0 6px; font-style: italic; color: var(--sg-text-2); }
+.sg-verdict { margin: 0; color: var(--sg-text); }
 
-/* full report */
-.sg-full { margin-top: 28px; }
-.sg-verdict { padding: 14px 16px; border-left: 4px solid var(--sg-accent); background: var(--sg-soft); border-radius: 0 10px 10px 0; margin: 0; }
-.sg-top { margin: 0; padding-left: 22px; }
-.sg-top-item { margin-bottom: 14px; }
-.sg-top-item p { margin: 4px 0 0; }
-.sg-how { color: #374151; }
-.sg-headlines { margin: 0; padding-left: 20px; }
-.sg-headlines li { margin-bottom: 8px; }
-.sg-cta { margin-top: 28px; padding: 22px; text-align: center; border-radius: 14px; background: #eef7f4; border: 1px solid var(--sg-accent); }
-.sg-cta p { margin: 0 0 14px; }
+/* ---------- stat tiles ---------- */
+.sg-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+.sg-tile { padding: 14px 16px; border-radius: 14px; border: 1px solid var(--sg-line); background: #fff; position: relative; overflow: hidden; }
+.sg-tile::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
+.sg-tile-num { display: block; font-size: 28px; font-weight: 800; color: var(--sg-ink); line-height: 1.1; }
+.sg-tile-label { display: block; font-size: 13px; color: var(--sg-muted); margin-top: 4px; }
+.sg-tile-navy::before { background: var(--sg-ink); }
+.sg-tile-red::before { background: var(--sg-bad); }
+.sg-tile-mint::before { background: var(--sg-accent); }
+.sg-tile-amber::before { background: var(--sg-ok); }
 
-.sg-mailnote { margin-top: 18px; padding: 12px 14px; border-radius: 10px; background: #eef7f4; font-size: 15px; }
-.sg-mailnote p { margin: 0 0 6px; }
-.sg-mailnote-warn { background: #fff7ed; border: 1px solid #fed7aa; }
-.sg-app .sg-inline { display: inline-block; margin: 4px 16px 4px 0; color: var(--sg-ink); }
-@media print { .sg-link, .sg-unlock-form, .sg-cta .sg-btn { display: none !important; } .sg-det { display: block; } }
-.sg-link { display: block; margin: 24px auto 0; background: none; border: 0; color: var(--sg-muted); text-decoration: underline; cursor: pointer; font: inherit; font-size: 14px; }
+/* ---------- chart cards ---------- */
+.sg-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 8px; }
+.sg-card { border: 1px solid var(--sg-line); border-radius: 14px; background: #fff; padding: 18px; }
+.sg-chart-wide { grid-column: 1 / -1; }
+.sg-chart-title { margin: 0; font-size: 17px; }
+.sg-chart-sub { margin: 2px 0 12px; font-size: 13px; color: var(--sg-muted); }
+.sg-chart-body { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.sg-donut { width: 170px; height: 170px; flex: 0 0 170px; }
+.sg-seg { cursor: pointer; transition: opacity .15s; }
+.sg-donut:hover .sg-seg { opacity: .55; }
+.sg-donut .sg-seg:hover { opacity: 1; }
+.sg-donut-big { font-size: 30px; font-weight: 800; text-anchor: middle; dominant-baseline: middle; fill: var(--sg-ink); }
+.sg-donut-small { font-size: 12px; text-anchor: middle; fill: var(--sg-muted); }
+.sg-legend { list-style: none; margin: 0; padding: 0; flex: 1 1 160px; min-width: 0; }
+.sg-legend li { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 14px; }
+.sg-swatch { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 12px; }
+.sg-swatch-icon { width: 18px; height: 18px; flex-basis: 18px; border-radius: 50%; color: #fff; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+.sg-legend-label { flex: 1; color: var(--sg-text-2); min-width: 0; }
+.sg-legend-val { font-weight: 700; color: var(--sg-text); font-variant-numeric: tabular-nums; }
+.sg-empty { color: var(--sg-muted); margin: 0; }
 
-@media (max-width: 600px) {
-	.sg-app { padding: 18px; border-radius: 12px; }
-	.sg-head { flex-direction: column; text-align: center; }
-	.sg-btn { width: 100%; text-align: center; }
+/* bar chart */
+.sg-bars { display: grid; gap: 10px; }
+.sg-bar-row { display: grid; grid-template-columns: 170px 1fr 52px; align-items: center; gap: 12px; cursor: default; }
+.sg-bar-label { font-size: 14px; color: var(--sg-text-2); }
+.sg-bar-track { position: relative; height: 14px; background: #f0efec; border-radius: 4px; overflow: hidden; }
+.sg-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 0 4px 4px 0; transition: width 1s ease; }
+.sg-grid { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,.9); }
+.sg-bar-val { font-weight: 700; font-size: 14px; text-align: right; font-variant-numeric: tabular-nums; color: var(--sg-text); }
+.sg-bar-row:hover .sg-bar-track { box-shadow: 0 0 0 2px #dfe7ee; }
+.sg-axis { display: flex; justify-content: space-between; margin: 6px 64px 0 182px; font-size: 11px; color: var(--sg-muted); }
+
+/* tooltip */
+.sg-tip {
+	position: absolute; z-index: 20; max-width: 240px; pointer-events: none;
+	padding: 8px 10px; border-radius: 8px;
+	background: var(--sg-ink); color: #fff; font-size: 13px; line-height: 1.4;
+	box-shadow: 0 8px 20px rgba(0,0,0,.18);
+}
+.sg-tip strong { display: block; margin-bottom: 2px; }
+
+/* ---------- sections ---------- */
+.sg-block { margin-top: 26px; }
+.sg-section { margin: 0 0 12px; font-size: 20px; }
+
+.sg-topfix-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.sg-topfix { position: relative; padding: 18px 16px 16px; border-radius: 14px; background: var(--sg-mint-soft); border: 1px solid #cfe9e0; }
+.sg-topfix:nth-child(2) { background: #eef3fb; border-color: #d6e1f2; }
+.sg-topfix:nth-child(3) { background: #fdf3ea; border-color: #f4dcc5; }
+.sg-topfix-n { display: inline-flex; width: 30px; height: 30px; border-radius: 50%; align-items: center; justify-content: center; background: var(--sg-ink); color: #fff; font-weight: 800; margin-bottom: 8px; }
+.sg-topfix-title { display: block; color: var(--sg-ink); font-size: 16px; margin-bottom: 6px; }
+.sg-topfix-why { margin: 0 0 8px; font-size: 14px; color: var(--sg-text-2); }
+.sg-topfix-how { margin: 0; font-size: 14px; }
+.sg-how-label { font-weight: 700; color: var(--sg-ink); }
+
+.sg-factors { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sg-factor { padding: 16px; border-radius: 14px; border: 1px solid var(--sg-line); border-top: 4px solid var(--sg-line); background: #fff; }
+.sg-f-good { border-top-color: var(--sg-good); }
+.sg-f-ok { border-top-color: var(--sg-ok); }
+.sg-f-bad { border-top-color: var(--sg-bad); }
+.sg-factor-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.sg-factor-title { margin: 0; font-size: 16px; }
+.sg-chip { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+.sg-chip-good { background: #e3f5e3; color: #086b08; }
+.sg-chip-ok { background: #fff3d6; color: #8a5a00; }
+.sg-chip-bad { background: #fbe4e4; color: #9e2222; }
+.sg-mini { height: 6px; background: #f0efec; border-radius: 99px; overflow: hidden; margin: 10px 0 8px; }
+.sg-mini-fill { height: 100%; border-radius: 99px; }
+.sg-factor-verdict { margin: 0 0 6px; font-size: 14px; color: var(--sg-text-2); }
+.sg-sub-h { margin: 12px 0 6px; font-size: 12px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--sg-ink); }
+.sg-issues, .sg-fixes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
+.sg-issues li { display: flex; gap: 8px; align-items: flex-start; }
+.sg-sev { flex: 0 0 auto; font-size: 11px; font-weight: 800; color: #fff; padding: 2px 7px; border-radius: 6px; margin-top: 1px; text-transform: uppercase; letter-spacing: .03em; }
+.sg-fixes li { position: relative; padding: 8px 10px 8px 34px; background: var(--sg-mint-soft); border-radius: 8px; }
+.sg-fixes li::before { content: "✓"; position: absolute; left: 10px; top: 7px; width: 17px; height: 17px; border-radius: 50%; background: var(--sg-accent); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+.sg-headlines { display: grid; gap: 10px; }
+.sg-headline { position: relative; padding: 14px 80px 14px 16px; border-radius: 12px; border: 1px dashed #c9d6e6; background: var(--sg-soft); }
+.sg-headline-tag { display: block; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--sg-accent); }
+.sg-headline-main { display: block; font-size: 17px; color: var(--sg-ink); }
+.sg-headline-sub { display: block; font-size: 14px; color: var(--sg-text-2); }
+.sg-copy { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); border: 1px solid var(--sg-line); background: #fff; border-radius: 8px; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; color: var(--sg-ink); }
+
+/* ---------- sprint lead form ---------- */
+.sg-sprint {
+	margin-top: 28px; padding: 26px; border-radius: 18px;
+	background: linear-gradient(135deg, #1f3558 0%, #26466f 60%, #2f6b6a 100%);
+	color: #fff;
+}
+.sg-app .sg-sprint-title { margin: 0 0 6px; font-size: 24px; color: #fff; }
+.sg-sprint-sub { margin: 0 0 16px; color: rgba(255,255,255,.88); }
+.sg-sprint-form { display: grid; gap: 12px; }
+.sg-sprint-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sg-field { display: block; }
+.sg-field-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+.sg-sprint .sg-input { border-color: transparent; }
+.sg-sprint .sg-btn { justify-self: start; }
+.sg-sprint .sg-error { color: #ffd1d1; }
+.sg-sprint-note { margin: 0; font-size: 13px; color: rgba(255,255,255,.7); }
+.sg-sprint-done { text-align: center; }
+.sg-sprint-done .sg-btn { margin-top: 4px; }
+.sg-check { width: 52px; height: 52px; margin: 0 auto 10px; border-radius: 50%; background: var(--sg-accent); color: #fff; font-size: 26px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+.sg-tools { display: flex; justify-content: center; gap: 22px; margin-top: 24px; }
+.sg-link { background: none; border: 0; color: var(--sg-muted); text-decoration: underline; cursor: pointer; font: inherit; font-size: 14px; padding: 0; }
+
+@media (max-width: 760px) {
+	.sg-app { padding: 16px; border-radius: 12px; }
+	.sg-hero { flex-direction: column; text-align: center; padding: 18px; }
+	.sg-tiles { grid-template-columns: 1fr 1fr; }
+	.sg-charts, .sg-factors, .sg-topfix-grid, .sg-sprint-fields { grid-template-columns: 1fr; }
+	.sg-chart-body { justify-content: center; }
+	.sg-bar-row { grid-template-columns: 1fr 44px; }
+	.sg-bar-label { grid-column: 1 / -1; margin-bottom: -6px; }
+	.sg-axis { margin: 6px 56px 0 0; }
+	.sg-btn, .sg-sprint .sg-btn { width: 100%; justify-self: stretch; }
+	.sg-sprint { padding: 20px; }
+	.sg-headline { padding-right: 16px; }
+	.sg-copy { position: static; transform: none; margin-top: 8px; }
+}
+@media print {
+	.sg-app { box-shadow: none; border: 0; }
+	.sg-tools, .sg-sprint-form, .sg-copy, .sg-tip { display: none !important; }
+	.sg-factor, .sg-card, .sg-topfix { break-inside: avoid; }
 }
 </style>
 </head>
@@ -168,8 +252,8 @@ body { padding: 8px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
 			<input type="text" id="sg-url" name="url" class="sg-input" placeholder="yourproduct.com" autocomplete="url" inputmode="url" required>
 			<button type="submit" class="sg-btn">Grade my homepage</button>
 		</div>
-		<input type="text" name="website" class="sg-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-		<p class="sg-hint">Free. Takes about 30 seconds. We score 8 conversion factors founders miss.</p>
+		<input type="text" name="sg_hp" class="sg-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+		<p class="sg-hint">Free. Takes about 30 seconds. You get a score, charts of where you're losing signups, and a fix for every problem.</p>
 		<p class="sg-error" id="sg-error" role="alert" hidden></p>
 	</form>
 	<div class="sg-loading" id="sg-loading" hidden>
@@ -226,12 +310,29 @@ window.SG_CONFIG = /*SG_CONFIG_START*/{
 		'Writing your fixes…'
 	];
 	var stepTimer = null;
+	var SVGNS = 'http://www.w3.org/2000/svg';
+
+	/* Validated categorical order (colour-blind safe on adjacent pairs) + neutral "Other". */
+	var CAT = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4'];
+	var OTHER = '#b5b3ad';
+	/* Status colours: only used where colour means good/bad, always with a label. */
+	var STATUS = { good: '#0ca30c', ok: '#fab219', bad: '#d03b3b' };
+	var SEV = {
+		high: { color: '#d03b3b', label: 'High', icon: '!' },
+		medium: { color: '#ec835a', label: 'Medium', icon: '▲' },
+		low: { color: '#fab219', label: 'Low', icon: '•' }
+	};
 
 	/* ---------- helpers ---------- */
 	function el(tag, cls, text) {
 		var n = document.createElement(tag);
 		if (cls) n.className = cls;
 		if (text != null) n.textContent = text;
+		return n;
+	}
+	function svgEl(tag, attrs) {
+		var n = document.createElementNS(SVGNS, tag);
+		for (var k in attrs) n.setAttribute(k, attrs[k]);
 		return n;
 	}
 	function append(parent) {
@@ -241,9 +342,13 @@ window.SG_CONFIG = /*SG_CONFIG_START*/{
 	function tone(score10) {
 		return score10 >= 8 ? 'good' : score10 >= 5 ? 'ok' : 'bad';
 	}
+	function toneLabel(score10) {
+		return score10 >= 8 ? 'Strong' : score10 >= 5 ? 'Needs work' : 'Leaking';
+	}
 	function host(url) {
 		try { return new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return url; }
 	}
+	function round1(n) { return Math.round(n * 10) / 10; }
 	function post(path, body) {
 		return fetch(cfg.endpoint + path, {
 			method: 'POST',
@@ -273,6 +378,36 @@ window.SG_CONFIG = /*SG_CONFIG_START*/{
 		clearInterval(stepTimer);
 		loading.hidden = true;
 	}
+	function scrollToResult() {
+		if (window.parent !== window) {
+			try { window.parent.postMessage({ type: 'sg-scroll' }, '*'); } catch (e) {}
+		} else {
+			resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+	}
+
+	/* ---------- tooltip ---------- */
+	var tip = el('div', 'sg-tip');
+	tip.setAttribute('role', 'tooltip');
+	tip.hidden = true;
+	app.appendChild(tip);
+	function bindTip(node, html) {
+		function move(e) {
+			var r = app.getBoundingClientRect();
+			var x = e.clientX - r.left + 14, y = e.clientY - r.top + 14;
+			if (x + 240 > r.width) x = e.clientX - r.left - 250;
+			tip.style.left = x + 'px';
+			tip.style.top = y + 'px';
+		}
+		node.addEventListener('mouseenter', function (e) {
+			tip.innerHTML = '';
+			html(tip);
+			tip.hidden = false;
+			move(e);
+		});
+		node.addEventListener('mousemove', move);
+		node.addEventListener('mouseleave', function () { tip.hidden = true; });
+	}
 
 	/* ---------- grade ---------- */
 	form.addEventListener('submit', function (e) {
@@ -285,7 +420,7 @@ window.SG_CONFIG = /*SG_CONFIG_START*/{
 		resultEl.innerHTML = '';
 		startLoading();
 
-		post('grade', { url: url, website: form.website.value })
+		post('grade', { url: url, hp: form.sg_hp ? form.sg_hp.value : '' })
 			.then(function (data) {
 				stopLoading();
 				renderResult(data);
@@ -297,227 +432,399 @@ window.SG_CONFIG = /*SG_CONFIG_START*/{
 			});
 	});
 
-	/* ---------- result ---------- */
+	/* ---------- charts ---------- */
 	function scoreRing(score) {
 		var r = 52, c = 2 * Math.PI * r;
-		var ns = 'http://www.w3.org/2000/svg';
-		var svg = document.createElementNS(ns, 'svg');
-		svg.setAttribute('viewBox', '0 0 120 120');
-		svg.setAttribute('class', 'sg-ring sg-' + tone(score / 10));
-		svg.setAttribute('role', 'img');
-		svg.setAttribute('aria-label', 'Score ' + score + ' out of 100');
-		var bg = document.createElementNS(ns, 'circle');
-		bg.setAttribute('cx', 60); bg.setAttribute('cy', 60); bg.setAttribute('r', r);
-		bg.setAttribute('class', 'sg-ring-bg');
-		var fg = document.createElementNS(ns, 'circle');
-		fg.setAttribute('cx', 60); fg.setAttribute('cy', 60); fg.setAttribute('r', r);
-		fg.setAttribute('class', 'sg-ring-fg');
-		fg.setAttribute('stroke-dasharray', c);
-		fg.setAttribute('stroke-dashoffset', c);
-		fg.setAttribute('transform', 'rotate(-90 60 60)');
-		var t = document.createElementNS(ns, 'text');
-		t.setAttribute('x', 60); t.setAttribute('y', 60);
-		t.setAttribute('class', 'sg-ring-num');
-		t.textContent = score;
-		var t2 = document.createElementNS(ns, 'text');
-		t2.setAttribute('x', 60); t2.setAttribute('y', 82);
-		t2.setAttribute('class', 'sg-ring-of');
-		t2.textContent = '/ 100';
-		svg.appendChild(bg); svg.appendChild(fg); svg.appendChild(t); svg.appendChild(t2);
+		var svg = svgEl('svg', { viewBox: '0 0 120 120', 'class': 'sg-ring', role: 'img', 'aria-label': 'Score ' + score + ' out of 100' });
+		var fg = svgEl('circle', { cx: 60, cy: 60, r: r, 'class': 'sg-ring-fg', stroke: STATUS[tone(score / 10)], 'stroke-dasharray': c, 'stroke-dashoffset': c, transform: 'rotate(-90 60 60)' });
+		append(svg,
+			svgEl('circle', { cx: 60, cy: 60, r: r, 'class': 'sg-ring-bg' }),
+			fg
+		);
+		var t = svgEl('text', { x: 60, y: 60, 'class': 'sg-ring-num' }); t.textContent = score;
+		var t2 = svgEl('text', { x: 60, y: 82, 'class': 'sg-ring-of' }); t2.textContent = '/ 100';
+		append(svg, t, t2);
 		requestAnimationFrame(function () {
 			requestAnimationFrame(function () { fg.setAttribute('stroke-dashoffset', c * (1 - score / 100)); });
 		});
 		return svg;
 	}
 
-	function renderResult(d) {
-		resultEl.innerHTML = '';
+	/* Donut: segments = [{label, value, color, tipLines[]}] */
+	function donut(segments, centerBig, centerSmall, ariaLabel) {
+		var size = 180, r = 70, sw = 26, c = 2 * Math.PI * r, gap = 2;
+		var total = segments.reduce(function (s, x) { return s + x.value; }, 0);
+		var svg = svgEl('svg', { viewBox: '0 0 ' + size + ' ' + size, 'class': 'sg-donut', role: 'img', 'aria-label': ariaLabel });
+		append(svg, svgEl('circle', { cx: 90, cy: 90, r: r, fill: 'none', stroke: '#f0efec', 'stroke-width': sw }));
+		var offset = 0;
+		segments.forEach(function (s) {
+			var len = total ? (s.value / total) * c : 0;
+			var seg = svgEl('circle', {
+				cx: 90, cy: 90, r: r, fill: 'none', stroke: s.color, 'stroke-width': sw,
+				'stroke-dasharray': Math.max(len - gap, 0.5) + ' ' + (c - Math.max(len - gap, 0.5)),
+				'stroke-dashoffset': -offset,
+				transform: 'rotate(-90 90 90)',
+				'class': 'sg-seg'
+			});
+			bindTip(seg, function (t) {
+				append(t, el('strong', null, s.label));
+				(s.tipLines || []).forEach(function (l) { t.appendChild(el('div', null, l)); });
+			});
+			svg.appendChild(seg);
+			offset += len;
+		});
+		var t1 = svgEl('text', { x: 90, y: 88, 'class': 'sg-donut-big' }); t1.textContent = centerBig;
+		var t2 = svgEl('text', { x: 90, y: 110, 'class': 'sg-donut-small' }); t2.textContent = centerSmall;
+		append(svg, t1, t2);
+		return svg;
+	}
 
-		var head = el('div', 'sg-head');
-		var info = el('div', 'sg-head-info');
-		append(info,
-			el('p', 'sg-eyebrow', host(d.url)),
-			el('h3', 'sg-grade-title', 'Grade ' + d.grade + ' · ' + d.label),
-			d.product_summary ? el('p', 'sg-summary', '“' + d.product_summary + '”') : null,
-			el('p', 'sg-muted', 'That’s how a first-time visitor reads your homepage.')
+	function legend(items) {
+		var ul = el('ul', 'sg-legend');
+		items.forEach(function (it) {
+			var li = el('li');
+			var sw = el('span', 'sg-swatch' + (it.icon ? ' sg-swatch-icon' : ''), it.icon || null);
+			sw.style.background = it.color;
+			append(li, sw, el('span', 'sg-legend-label', it.label), el('span', 'sg-legend-val', it.value));
+			ul.appendChild(li);
+		});
+		return ul;
+	}
+
+	function lossChart(d) {
+		var card = el('div', 'sg-card sg-chart');
+		append(card,
+			el('h4', 'sg-chart-title', 'Where you’re losing points'),
+			el('p', 'sg-chart-sub', 'Share of the ' + (100 - d.overall) + ' points your homepage is missing, by factor')
 		);
-		append(head, scoreRing(d.overall), info);
+		var losses = d.categories.map(function (c) {
+			return { label: c.label, lost: round1(c.weight * (10 - c.score) / 10), score: c.score, weight: c.weight };
+		}).filter(function (x) { return x.lost > 0; }).sort(function (a, b) { return b.lost - a.lost; });
 
-		var list = el('div', 'sg-cats');
+		if (!losses.length) {
+			card.appendChild(el('p', 'sg-empty', 'No points lost. This homepage is in great shape.'));
+			return card;
+		}
+		var top = losses.slice(0, 5), rest = losses.slice(5);
+		var segs = top.map(function (x, i) {
+			return { label: x.label, value: x.lost, color: CAT[i], tipLines: ['−' + x.lost + ' pts', 'Scored ' + x.score + '/10 (worth ' + x.weight + ' pts)'] };
+		});
+		if (rest.length) {
+			var other = round1(rest.reduce(function (s, x) { return s + x.lost; }, 0));
+			segs.push({ label: 'Other (' + rest.length + ' factors)', value: other, color: OTHER, tipLines: ['−' + other + ' pts', rest.map(function (x) { return x.label; }).join(', ')] });
+		}
+		var lostTotal = round1(losses.reduce(function (s, x) { return s + x.lost; }, 0));
+		var wrap = el('div', 'sg-chart-body');
+		append(wrap,
+			donut(segs, '−' + Math.round(lostTotal), 'points lost', 'Points lost by factor'),
+			legend(segs.map(function (s) { return { color: s.color, label: s.label, value: '−' + s.value }; }))
+		);
+		card.appendChild(wrap);
+		return card;
+	}
+
+	function severityChart(d) {
+		var counts = { high: 0, medium: 0, low: 0 };
+		d.categories.forEach(function (c) { c.issues.forEach(function (i) { counts[i.severity || 'medium']++; }); });
+		var total = counts.high + counts.medium + counts.low;
+		var card = el('div', 'sg-card sg-chart');
+		append(card,
+			el('h4', 'sg-chart-title', 'Problems by severity'),
+			el('p', 'sg-chart-sub', total + ' issues found on your homepage')
+		);
+		if (!total) {
+			card.appendChild(el('p', 'sg-empty', 'No problems found.'));
+			return card;
+		}
+		var segs = ['high', 'medium', 'low'].filter(function (k) { return counts[k]; }).map(function (k) {
+			return {
+				label: SEV[k].label + ' priority', value: counts[k], color: SEV[k].color, icon: SEV[k].icon,
+				tipLines: [counts[k] + ' issue' + (counts[k] === 1 ? '' : 's'), k === 'high' ? 'Costing you signups right now' : k === 'medium' ? 'Noticeable conversion leak' : 'Polish']
+			};
+		});
+		var wrap = el('div', 'sg-chart-body');
+		append(wrap,
+			donut(segs, String(total), 'issues', 'Issues by severity'),
+			legend(segs.map(function (s) { return { color: s.color, icon: s.icon, label: s.label, value: String(s.value) }; }))
+		);
+		card.appendChild(wrap);
+		return card;
+	}
+
+	function barChart(d) {
+		var card = el('div', 'sg-card sg-chart sg-chart-wide');
+		append(card,
+			el('h4', 'sg-chart-title', 'Score by factor'),
+			el('p', 'sg-chart-sub', 'Each factor out of 10. Hover a bar for the verdict.')
+		);
+		var list = el('div', 'sg-bars');
 		d.categories.forEach(function (c) {
-			var row = el('div', 'sg-cat sg-' + tone(c.score));
-			var top = el('div', 'sg-cat-top');
-			append(top, el('span', 'sg-cat-label', c.label), el('span', 'sg-cat-score', c.score + '/10'));
-			var bar = el('div', 'sg-bar');
+			var row = el('div', 'sg-bar-row');
+			var track = el('div', 'sg-bar-track');
 			var fill = el('div', 'sg-bar-fill');
+			fill.style.background = STATUS[tone(c.score)];
 			fill.style.width = '0%';
-			bar.appendChild(fill);
+			track.appendChild(fill);
+			for (var g = 1; g < 5; g++) {
+				var line = el('span', 'sg-grid');
+				line.style.left = (g * 20) + '%';
+				track.appendChild(line);
+			}
+			append(row,
+				el('span', 'sg-bar-label', c.label),
+				track,
+				el('span', 'sg-bar-val sg-t-' + tone(c.score), c.score + '/10')
+			);
+			bindTip(row, function (t) {
+				append(t, el('strong', null, c.label + ': ' + c.score + '/10 · ' + toneLabel(c.score)), el('div', null, c.verdict));
+			});
+			list.appendChild(row);
 			requestAnimationFrame(function () {
 				requestAnimationFrame(function () { fill.style.width = (c.score * 10) + '%'; });
 			});
-			append(row, top, bar, el('p', 'sg-cat-verdict', c.verdict));
-			if (c.quick_fix) {
-				var qf = el('div', 'sg-quick');
-				append(qf, el('span', 'sg-quick-label', 'Quick fix'), el('p', 'sg-quick-text', c.quick_fix));
-				row.appendChild(qf);
-			}
-			row.setAttribute('data-key', c.key);
-			list.appendChild(row);
 		});
-
-		append(resultEl, head, el('h4', 'sg-section', 'Your 8 conversion factors'), list, lockedPanel(d), againLink());
-		resultEl.hidden = false;
-		try { window.parent.postMessage({ type: 'sg-scroll' }, '*'); } catch (e) {}
+		var axis = el('div', 'sg-axis');
+		['0', '2', '4', '6', '8', '10'].forEach(function (n) { axis.appendChild(el('span', null, n)); });
+		append(card, list, axis);
+		return card;
 	}
 
-	function lockedPanel(d) {
-		var wrap = el('div', 'sg-locked');
-		var fake = el('div', 'sg-fake', null);
-		fake.setAttribute('aria-hidden', 'true');
-		for (var i = 0; i < 5; i++) fake.appendChild(el('div', 'sg-fake-line'));
+	function statTiles(d) {
+		var issues = 0, high = 0, fixes = d.top_fixes.length;
+		d.categories.forEach(function (c) {
+			issues += c.issues.length;
+			fixes += c.fixes.length;
+			c.issues.forEach(function (i) { if (i.severity === 'high') high++; });
+		});
+		var weakest = d.categories.slice().sort(function (a, b) { return a.score - b.score; })[0];
+		var tiles = [
+			{ n: String(issues), l: 'Issues found', cls: 'sg-tile-navy' },
+			{ n: String(high), l: 'High priority', cls: 'sg-tile-red' },
+			{ n: String(fixes), l: 'Fixes ready', cls: 'sg-tile-mint' },
+			{ n: weakest ? weakest.score + '/10' : '–', l: 'Weakest: ' + (weakest ? weakest.label : ''), cls: 'sg-tile-amber' }
+		];
+		var row = el('div', 'sg-tiles');
+		tiles.forEach(function (t) {
+			var tile = el('div', 'sg-tile ' + t.cls);
+			append(tile, el('span', 'sg-tile-num', t.n), el('span', 'sg-tile-label', t.l));
+			row.appendChild(tile);
+		});
+		return row;
+	}
 
-		var box = el('div', 'sg-unlock');
-		append(box,
-			el('h4', 'sg-unlock-title', 'Want the full fix list? ' + d.locked.fixes + ' more fixes are ready'),
-			el('p', 'sg-muted', 'Unlock your top 3 priority fixes, ' + d.locked.headlines + ' rewritten headlines, and the ' + d.locked.issues + ' specific issues we found on your page. We’ll also email you the full report.')
+	/* ---------- report sections ---------- */
+	function topFixes(d) {
+		if (!d.top_fixes || !d.top_fixes.length) return null;
+		var sec = el('section', 'sg-block');
+		sec.appendChild(el('h4', 'sg-section', 'Your top 3 fixes, in order of impact'));
+		var grid = el('div', 'sg-topfix-grid');
+		d.top_fixes.forEach(function (f, i) {
+			var card = el('div', 'sg-topfix');
+			append(card,
+				el('span', 'sg-topfix-n', String(i + 1)),
+				el('strong', 'sg-topfix-title', f.title),
+				el('p', 'sg-topfix-why', f.why),
+				append(el('p', 'sg-topfix-how'), el('span', 'sg-how-label', 'How: '), document.createTextNode(f.how))
+			);
+			grid.appendChild(card);
+		});
+		sec.appendChild(grid);
+		return sec;
+	}
+
+	function breakdown(d) {
+		var sec = el('section', 'sg-block');
+		sec.appendChild(el('h4', 'sg-section', 'Factor-by-factor breakdown'));
+		var grid = el('div', 'sg-factors');
+		d.categories.slice().sort(function (a, b) { return a.score - b.score; }).forEach(function (c) {
+			var t = tone(c.score);
+			var card = el('article', 'sg-factor sg-f-' + t);
+			var head = el('div', 'sg-factor-head');
+			append(head,
+				el('h5', 'sg-factor-title', c.label),
+				el('span', 'sg-chip sg-chip-' + t, c.score + '/10 · ' + toneLabel(c.score))
+			);
+			var mini = el('div', 'sg-mini');
+			var mf = el('div', 'sg-mini-fill');
+			mf.style.width = (c.score * 10) + '%';
+			mf.style.background = STATUS[t];
+			mini.appendChild(mf);
+			append(card, head, mini, el('p', 'sg-factor-verdict', c.verdict));
+
+			if (c.issues.length) {
+				card.appendChild(el('p', 'sg-sub-h', 'Problems'));
+				var ul = el('ul', 'sg-issues');
+				c.issues.forEach(function (i) {
+					var s = SEV[i.severity] || SEV.medium;
+					var li = el('li');
+					var pill = el('span', 'sg-sev', s.icon + ' ' + s.label);
+					pill.style.background = s.color;
+					append(li, pill, el('span', null, i.text));
+					ul.appendChild(li);
+				});
+				card.appendChild(ul);
+			}
+			if (c.fixes.length) {
+				card.appendChild(el('p', 'sg-sub-h', 'Recommendations'));
+				var uf = el('ul', 'sg-fixes');
+				c.fixes.forEach(function (f) { uf.appendChild(el('li', null, f)); });
+				card.appendChild(uf);
+			}
+			grid.appendChild(card);
+		});
+		sec.appendChild(grid);
+		return sec;
+	}
+
+	function headlines(d) {
+		if (!d.headline_rewrites || !d.headline_rewrites.length) return null;
+		var sec = el('section', 'sg-block');
+		sec.appendChild(el('h4', 'sg-section', 'Headline rewrites to test'));
+		var list = el('div', 'sg-headlines');
+		d.headline_rewrites.forEach(function (h, i) {
+			var parts = h.split(/\s+[—–-]\s+/);
+			var card = el('div', 'sg-headline');
+			append(card,
+				el('span', 'sg-headline-tag', 'Option ' + String.fromCharCode(65 + i)),
+				el('strong', 'sg-headline-main', parts[0]),
+				parts[1] ? el('span', 'sg-headline-sub', parts.slice(1).join(' — ')) : null
+			);
+			var copy = el('button', 'sg-copy', 'Copy');
+			copy.type = 'button';
+			copy.addEventListener('click', function () {
+				var done = function () { copy.textContent = 'Copied'; setTimeout(function () { copy.textContent = 'Copy'; }, 1500); };
+				if (navigator.clipboard) navigator.clipboard.writeText(h).then(done, done); else done();
+			});
+			card.appendChild(copy);
+			list.appendChild(card);
+		});
+		sec.appendChild(list);
+		return sec;
+	}
+
+	/* ---------- sprint lead form ---------- */
+	function sprintForm(d) {
+		var issues = 0;
+		d.categories.forEach(function (c) { issues += c.issues.length; });
+
+		var wrap = el('section', 'sg-sprint');
+		append(wrap,
+			el('h4', 'sg-sprint-title', 'Want us to take care of these issues?'),
+			el('p', 'sg-sprint-sub', 'Our team fixes the ' + issues + ' problems above in a focused conversion sprint: copy, CTAs, social proof and page structure. Leave your details and we’ll reach out within one business day.')
 		);
 
-		var f = el('form', 'sg-unlock-form');
+		var f = el('form', 'sg-sprint-form');
 		f.noValidate = true;
-		var name = el('input', 'sg-input');
-		name.type = 'text'; name.name = 'name'; name.placeholder = 'First name (optional)'; name.autocomplete = 'given-name';
+
+		function field(labelText, input) {
+			var lab = el('label', 'sg-field');
+			append(lab, el('span', 'sg-field-label', labelText), input);
+			return lab;
+		}
+		var phone = el('input', 'sg-input');
+		phone.type = 'tel'; phone.name = 'phone'; phone.placeholder = '+91 98765 43210'; phone.autocomplete = 'tel'; phone.required = true;
 		var email = el('input', 'sg-input');
-		email.type = 'email'; email.name = 'email'; email.placeholder = 'you@company.com'; email.required = true; email.autocomplete = 'email';
+		email.type = 'email'; email.name = 'email'; email.placeholder = 'you@company.com'; email.autocomplete = 'email'; email.required = true;
 		var hp = el('input', 'sg-hp');
-		hp.type = 'text'; hp.name = 'website'; hp.tabIndex = -1; hp.autocomplete = 'off';
+		hp.type = 'text'; hp.name = 'sg_hp'; hp.tabIndex = -1; hp.autocomplete = 'off';
 		hp.setAttribute('aria-hidden', 'true');
-		var btn = el('button', 'sg-btn', 'Unlock my full report');
+		var btn = el('button', 'sg-btn sg-btn-lg', 'Order your sprint');
 		btn.type = 'submit';
 		var err = el('p', 'sg-error');
 		err.hidden = true;
 		err.setAttribute('role', 'alert');
-		var row = el('div', 'sg-row');
-		append(row, email, btn);
-		append(f, name, row, hp, err, el('p', 'sg-hint', 'No spam. One report, plus the occasional SEO/CRO tip you can unsubscribe from.'));
+
+		var fields = el('div', 'sg-sprint-fields');
+		append(fields, field('Contact number', phone), field('Work email', email));
+		append(f, fields, hp, btn, err, el('p', 'sg-sprint-note', 'No spam. We’ll only use these details to plan your sprint.'));
 
 		f.addEventListener('submit', function (e) {
 			e.preventDefault();
-			var v = email.value.trim();
-			if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
-				err.textContent = 'Please enter a valid email address.'; err.hidden = false; return;
-			}
+			var ph = phone.value.trim(), em = email.value.trim();
+			var digits = ph.replace(/\D/g, '');
+			if (digits.length < 7 || digits.length > 15) { err.textContent = 'Please enter a valid contact number, including country code.'; err.hidden = false; phone.focus(); return; }
+			if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { err.textContent = 'Please enter a valid work email.'; err.hidden = false; email.focus(); return; }
 			err.hidden = true;
 			btn.disabled = true;
-			btn.textContent = 'Unlocking…';
-			post('unlock', { id: d.id, email: v, name: name.value.trim(), website: hp.value })
-				.then(function (full) { wrap.replaceWith(fullReport(full, { id: d.id, email: v, name: name.value.trim() })); fillCategoryDetails(full); })
+			btn.textContent = 'Sending…';
+			var who = { id: d.id, email: em, phone: ph };
+			post('lead', { id: d.id, email: em, phone: ph, hp: hp.value })
+				.then(function (res) { wrap.replaceWith(sprintThanks(res, who)); })
 				.catch(function (e2) {
 					err.textContent = e2.message; err.hidden = false;
-					btn.disabled = false; btn.textContent = 'Unlock my full report';
+					btn.disabled = false; btn.textContent = 'Order your sprint';
 				});
 		});
 
-		box.appendChild(f);
-		append(wrap, fake, box);
+		wrap.appendChild(f);
 		return wrap;
 	}
 
-	function fullReport(r, who) {
-		var wrap = el('div', 'sg-full');
-
-		if (r.overall_verdict) wrap.appendChild(el('p', 'sg-verdict', r.overall_verdict));
-
-		if (r.top_fixes && r.top_fixes.length) {
-			wrap.appendChild(el('h4', 'sg-section', 'Your top 3 fixes'));
-			var ol = el('ol', 'sg-top');
-			r.top_fixes.forEach(function (f) {
-				var li = el('li', 'sg-top-item');
-				append(li, el('strong', null, f.title), el('p', null, f.why), el('p', 'sg-how', 'How: ' + f.how));
-				ol.appendChild(li);
-			});
-			wrap.appendChild(ol);
+	function sprintThanks(res, who) {
+		var box = el('section', 'sg-sprint sg-sprint-done');
+		append(box,
+			el('div', 'sg-check', '✓'),
+			el('h4', 'sg-sprint-title', 'Sprint request received'),
+			el('p', 'sg-sprint-sub', 'Thanks! We’ll call you on ' + who.phone + ' or email ' + who.email + ' within one business day to plan your sprint.')
+		);
+		if (res.emailed === true) {
+			box.appendChild(el('p', 'sg-sprint-sub', 'A copy of this report is on its way to your inbox (check spam or promotions if you don’t see it).'));
+		} else if (res.emailed === false) {
+			box.appendChild(el('p', 'sg-sprint-sub', 'We couldn’t email your copy of the report just now, but your request is saved. Use “Print / save as PDF” below to keep this report.'));
 		}
-
-		if (r.headline_rewrites && r.headline_rewrites.length) {
-			wrap.appendChild(el('h4', 'sg-section', 'Headline rewrites to test'));
-			var ul = el('ul', 'sg-headlines');
-			r.headline_rewrites.forEach(function (h) { ul.appendChild(el('li', null, h)); });
-			wrap.appendChild(ul);
-		}
-
 		if (cfg.bookingUrl) {
-			var cta = el('div', 'sg-cta');
-			var a = el('a', 'sg-btn sg-btn-lg', cfg.ctaText || 'Book a call');
+			var a = el('a', 'sg-btn', cfg.ctaText || 'Book a call now');
 			a.href = cfg.bookingUrl; a.target = '_blank'; a.rel = 'noopener';
-			append(cta,
-				el('p', null, 'Want these fixed without the guesswork? ' + (cfg.brand ? cfg.brand + ' will' : 'We’ll') + ' walk through your homepage live and prioritise the changes.'),
-				a
-			);
-			wrap.appendChild(cta);
+			box.appendChild(el('p', 'sg-sprint-sub', 'Prefer to pick a time yourself?'));
+			box.appendChild(a);
 		}
-		wrap.appendChild(emailStatus(r.emailed, who));
-		return wrap;
-	}
-
-	function emailStatus(emailed, who) {
-		var box = el('div', 'sg-mailnote');
-		if (emailed === true) {
-			box.appendChild(el('p', null, '\u2713 Full report sent to ' + who.email + '. If it isn\u2019t in your inbox in a couple of minutes, check spam or promotions.'));
-		} else if (emailed === false) {
-			box.className += ' sg-mailnote-warn';
-			box.appendChild(el('p', null, 'We couldn\u2019t email the report to ' + who.email + ' just now. Your full report is on this page, so save or print it.'));
-			var retry = el('button', 'sg-link sg-inline', 'Try sending the email again');
-			retry.type = 'button';
-			retry.addEventListener('click', function () {
-				retry.disabled = true; retry.textContent = 'Sending\u2026';
-				post('unlock', { id: who.id, email: who.email, name: who.name, website: '' })
-					.then(function (res) { box.replaceWith(emailStatus(res.emailed, who)); })
-					.catch(function () { retry.disabled = false; retry.textContent = 'Try sending the email again'; });
-			});
-			box.appendChild(retry);
-		}
-		var print = el('button', 'sg-link sg-inline', 'Print / save as PDF');
-		print.type = 'button';
-		print.addEventListener('click', function () { window.print(); });
-		box.appendChild(print);
-		box.appendChild(el('p', 'sg-muted', 'Issues and extra fixes for each factor are now open above.'));
 		return box;
 	}
 
-	function fillCategoryDetails(r) {
-		r.categories.forEach(function (c) {
-			var row = resultEl.querySelector('.sg-cat[data-key="' + c.key + '"]');
-			var more = c.fixes.slice(1);
-			if (!row || (!c.issues.length && !more.length)) return;
-			var det = el('details', 'sg-det');
-			det.appendChild(el('summary', null, 'Issues & fixes'));
-			if (c.issues.length) {
-				det.appendChild(el('p', 'sg-det-h', 'What’s wrong'));
-				var ui = el('ul');
-				c.issues.forEach(function (x) { ui.appendChild(el('li', null, x)); });
-				det.appendChild(ui);
-			}
-			if (more.length) {
-				det.appendChild(el('p', 'sg-det-h', 'More fixes'));
-				var uf = el('ul');
-				more.forEach(function (x) { uf.appendChild(el('li', null, x)); });
-				det.appendChild(uf);
-			}
-			row.appendChild(det);
-		});
-	}
+	/* ---------- result ---------- */
+	function renderResult(d) {
+		resultEl.innerHTML = '';
 
-	function againLink() {
-		var b = el('button', 'sg-link', 'Grade another homepage');
-		b.type = 'button';
-		b.addEventListener('click', function () {
+		var hero = el('div', 'sg-hero');
+		var info = el('div', 'sg-hero-info');
+		append(info,
+			el('p', 'sg-eyebrow', host(d.url)),
+			el('h3', 'sg-grade-title', 'Grade ' + d.grade + ' · ' + d.label),
+			d.product_summary ? el('p', 'sg-summary', '“' + d.product_summary + '”') : null,
+			d.overall_verdict ? el('p', 'sg-verdict', d.overall_verdict) : null
+		);
+		append(hero, scoreRing(d.overall), info);
+
+		var charts = el('div', 'sg-charts');
+		append(charts, lossChart(d), severityChart(d), barChart(d));
+
+		var tools = el('div', 'sg-tools');
+		var print = el('button', 'sg-link', 'Print / save as PDF');
+		print.type = 'button';
+		print.addEventListener('click', function () { window.print(); });
+		var again = el('button', 'sg-link', 'Grade another homepage');
+		again.type = 'button';
+		again.addEventListener('click', function () {
 			resultEl.hidden = true;
 			resultEl.innerHTML = '';
 			form.hidden = false;
 			form.url.value = '';
 			form.url.focus();
 		});
-		return b;
+		append(tools, print, again);
+
+		append(resultEl,
+			hero,
+			statTiles(d),
+			charts,
+			topFixes(d),
+			sprintForm(d),
+			breakdown(d),
+			headlines(d),
+			tools
+		);
+		resultEl.hidden = false;
+		scrollToResult();
 	}
 })();
 

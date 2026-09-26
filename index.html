@@ -702,83 +702,20 @@ window.SG_CONFIG = /*SG_CONFIG_START*/{
 		return sec;
 	}
 
-	/* ---------- sprint lead form ---------- */
-	function sprintForm(d) {
+	/* ---------- call to action (no form) ---------- */
+	function ctaBlock(d) {
+		if (!cfg.bookingUrl) return null;
 		var issues = 0;
 		d.categories.forEach(function (c) { issues += c.issues.length; });
-
-		var wrap = el('section', 'sg-sprint');
+		var wrap = el('section', 'sg-sprint sg-sprint-done');
+		var a = el('a', 'sg-btn sg-btn-lg', cfg.ctaText || 'Book a strategy call');
+		a.href = cfg.bookingUrl; a.target = '_blank'; a.rel = 'noopener';
 		append(wrap,
 			el('h4', 'sg-sprint-title', 'Want us to take care of these issues?'),
-			el('p', 'sg-sprint-sub', 'Our team fixes the ' + issues + ' problems above in a focused conversion sprint: copy, CTAs, social proof and page structure. Leave your details and we’ll reach out within one business day.')
+			el('p', 'sg-sprint-sub', 'Our team can fix the ' + issues + ' problems above in a focused conversion sprint.'),
+			a
 		);
-
-		var f = el('form', 'sg-sprint-form');
-		f.noValidate = true;
-
-		function field(labelText, input) {
-			var lab = el('label', 'sg-field');
-			append(lab, el('span', 'sg-field-label', labelText), input);
-			return lab;
-		}
-		var phone = el('input', 'sg-input');
-		phone.type = 'tel'; phone.name = 'phone'; phone.placeholder = '+91 98765 43210'; phone.autocomplete = 'tel'; phone.required = true;
-		var email = el('input', 'sg-input');
-		email.type = 'email'; email.name = 'email'; email.placeholder = 'you@company.com'; email.autocomplete = 'email'; email.required = true;
-		var hp = el('input', 'sg-hp');
-		hp.type = 'text'; hp.name = 'sg_hp'; hp.tabIndex = -1; hp.autocomplete = 'off';
-		hp.setAttribute('aria-hidden', 'true');
-		var btn = el('button', 'sg-btn sg-btn-lg', 'Order your sprint');
-		btn.type = 'submit';
-		var err = el('p', 'sg-error');
-		err.hidden = true;
-		err.setAttribute('role', 'alert');
-
-		var fields = el('div', 'sg-sprint-fields');
-		append(fields, field('Contact number', phone), field('Work email', email));
-		append(f, fields, hp, btn, err, el('p', 'sg-sprint-note', 'No spam. We’ll only use these details to plan your sprint.'));
-
-		f.addEventListener('submit', function (e) {
-			e.preventDefault();
-			var ph = phone.value.trim(), em = email.value.trim();
-			var digits = ph.replace(/\D/g, '');
-			if (digits.length < 7 || digits.length > 15) { err.textContent = 'Please enter a valid contact number, including country code.'; err.hidden = false; phone.focus(); return; }
-			if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { err.textContent = 'Please enter a valid work email.'; err.hidden = false; email.focus(); return; }
-			err.hidden = true;
-			btn.disabled = true;
-			btn.textContent = 'Sending…';
-			var who = { id: d.id, email: em, phone: ph };
-			post('lead', { id: d.id, email: em, phone: ph, hp: hp.value })
-				.then(function (res) { wrap.replaceWith(sprintThanks(res, who)); })
-				.catch(function (e2) {
-					err.textContent = e2.message; err.hidden = false;
-					btn.disabled = false; btn.textContent = 'Order your sprint';
-				});
-		});
-
-		wrap.appendChild(f);
 		return wrap;
-	}
-
-	function sprintThanks(res, who) {
-		var box = el('section', 'sg-sprint sg-sprint-done');
-		append(box,
-			el('div', 'sg-check', '✓'),
-			el('h4', 'sg-sprint-title', 'Sprint request received'),
-			el('p', 'sg-sprint-sub', 'Thanks! We’ll call you on ' + who.phone + ' or email ' + who.email + ' within one business day to plan your sprint.')
-		);
-		if (res.emailed === true) {
-			box.appendChild(el('p', 'sg-sprint-sub', 'A copy of this report is on its way to your inbox (check spam or promotions if you don’t see it).'));
-		} else if (res.emailed === false) {
-			box.appendChild(el('p', 'sg-sprint-sub', 'We couldn’t email your copy of the report just now, but your request is saved. Use “Print / save as PDF” below to keep this report.'));
-		}
-		if (cfg.bookingUrl) {
-			var a = el('a', 'sg-btn', cfg.ctaText || 'Book a call now');
-			a.href = cfg.bookingUrl; a.target = '_blank'; a.rel = 'noopener';
-			box.appendChild(el('p', 'sg-sprint-sub', 'Prefer to pick a time yourself?'));
-			box.appendChild(a);
-		}
-		return box;
 	}
 
 	/* ---------- result ---------- */
@@ -818,7 +755,7 @@ window.SG_CONFIG = /*SG_CONFIG_START*/{
 			statTiles(d),
 			charts,
 			topFixes(d),
-			sprintForm(d),
+			ctaBlock(d),
 			breakdown(d),
 			headlines(d),
 			tools
